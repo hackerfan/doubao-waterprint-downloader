@@ -1,0 +1,20 @@
+console.log('[Doubao Tool] Content script 已加载');let script=document.createElement('script'),detectedImages=(script.src=chrome.runtime.getURL('inject.js'),(document.head||document.documentElement).appendChild(script),console.log('[Doubao Tool] 注入脚本已添加到页面'),[]);function createDownloadButton(){var o,e;console.log('[Doubao Tool] 开始创建下载按钮'),document.getElementById('doubao-download-btn')?console.log('[Doubao Tool] 下载按钮已存在，跳过创建'):((o=document.createElement('div')).id='doubao-download-btn',o.innerHTML='下载',o.className='doubao-download-btn',console.log('[Doubao Tool] 下载按钮元素已创建'),(e=document.querySelector('.header')||document.querySelector('nav')||document.body)?(e.appendChild(o),console.log('[Doubao Tool] 下载按钮已添加到导航栏')):(document.body.appendChild(o),console.log('[Doubao Tool] 下载按钮已添加到页面body')),o.addEventListener('click',showImageSelector),console.log('[Doubao Tool] 下载按钮点击事件已绑定'))}function showImageSelector(){if(console.log('[Doubao Tool] 显示图片选择弹窗'),console.log('[Doubao Tool] 当前检测到的图片数量:',detectedImages.length),0===detectedImages.length)console.log('[Doubao Tool] 没有检测到图片，显示提示'),alert('暂无检测到生成的图片，请先生成图片后再试。');else{console.log('[Doubao Tool] 创建图片选择弹窗'),console.log('[Doubao Tool] 图片数据详情:',detectedImages);let e=document.createElement('div');e.className='doubao-modal',e.innerHTML=`
+    <div class="doubao-modal-content">
+      <div class="doubao-modal-header">
+        <h3>选择要下载的图片</h3>
+        <span class="doubao-close-btn">&times;</span>
+      </div>
+      <div class="doubao-modal-body">
+        ${detectedImages.map((o,e)=>`
+          <div class="doubao-image-item" data-index="${e}">
+            <img src="${o.rawUrl||o.thumbUrl}" alt="生成的图片 ${e+1}" />
+            <div class="doubao-image-info">
+              <p>提示词: ${o.prompt?o.prompt.substring(0,50)+'...':'无提示词'}</p>
+              <p>状态: ${o.rawUrl?'无水印':'仅预览'}</p>
+              <button class="doubao-download-image-btn" data-index="${e}">下载</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `,document.body.appendChild(e),console.log('[Doubao Tool] 图片选择弹窗已添加到页面');e.querySelector('.doubao-close-btn').addEventListener('click',()=>{document.body.removeChild(e),console.log('[Doubao Tool] 图片选择弹窗已关闭')}),e.addEventListener('click',o=>{o.target===e&&(document.body.removeChild(e),console.log('[Doubao Tool] 图片选择弹窗已关闭（点击外部）'))});var o=e.querySelectorAll('.doubao-download-image-btn');console.log('[Doubao Tool] 添加下载按钮事件，按钮数量:',o.length),o.forEach(o=>{o.addEventListener('click',o=>{o=o.target.getAttribute('data-index'),console.log('[Doubao Tool] 下载按钮点击，索引:',o),o=detectedImages[o];o&&o.rawUrl?(console.log('[Doubao Tool] 开始下载图片:',o.rawUrl),chrome.runtime.sendMessage({action:'downloadImage',url:o.rawUrl,filename:'doubao_image_'+o.id.substring(1+o.id.lastIndexOf('/'))},o=>{o&&o.success?(console.log('[Doubao Tool] 图片下载成功'),alert('图片已开始下载!')):(console.error('[Doubao Tool] 下载失败:',o?o.error:'未知错误'),alert('下载失败: '+(o?o.error:'未知错误')))})):(console.log('[Doubao Tool] 图片URL不存在:',o),alert('无水印图片URL不可用，请稍后再试'))})})}}console.log('[Doubao Tool] 初始化检测图片数组'),window.addEventListener('doubaoImagesFound',o=>{console.log('[Doubao Tool] 接收到doubaoImagesFound事件');o=o.detail.images;console.log('[Doubao Tool] 事件中的图片数据:',o),o&&0<o.length?(console.log('[Doubao Tool] 检测到豆包生成的图片:',detectedImages=o),console.log('[Doubao Tool] 当前detectedImages数组:',detectedImages)):console.log('[Doubao Tool] 事件中没有有效图片')}),document.addEventListener('DOMContentLoaded',()=>{console.log('[Doubao Tool] DOM内容已加载'),setTimeout(createDownloadButton,1e3)}),'complete'===document.readyState||'interactive'===document.readyState?(console.log('[Doubao Tool] 页面已加载完成，当前状态:',document.readyState),setTimeout(createDownloadButton,1e3)):console.log('[Doubao Tool] 页面尚未加载完成，当前状态:',document.readyState),setInterval(()=>{document.getElementById('doubao-download-btn')||(console.log('[Doubao Tool] 下载按钮不存在，尝试重新创建'),createDownloadButton())},5e3);
