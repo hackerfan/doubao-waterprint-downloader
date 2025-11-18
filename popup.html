@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 300px;
+      padding: 10px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    h1 {
+      font-size: 16px;
+      margin-top: 0;
+    }
+    .container {
+      margin: 10px 0;
+    }
+    button {
+      background-color: #4285f4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 14px;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #3367d6;
+    }
+    .status {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #666;
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .logo img {
+      width: 60px;
+      height: 60px;
+    }
+    .instructions {
+      background-color: #f8f9fa;
+      padding: 10px;
+      border-radius: 4px;
+      margin-top: 10px;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <img src="icon128.png" alt="豆包无水印图片提取工具">
+    <h1>豆包无水印图片提取工具</h1>
+  </div>
+  
+  <div class="container">
+    <p>此工具可以帮助您提取豆包生成的无水印图片。</p>
+    
+    <div class="instructions">
+      <strong>使用方法：</strong>
+      <ol>
+        <li>打开豆包网站 (www.doubao.com)</li>
+        <li>生成图片后，点击页面顶部的"下载"按钮</li>
+        <li>在弹出的窗口中选择您想要下载的图片</li>
+        <li>点击"下载"按钮保存无水印图片到本地</li>
+      </ol>
+    </div>
+    
+    <button id="refreshButton">刷新豆包页面</button>
+    <p class="status" id="statusText">就绪</p>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

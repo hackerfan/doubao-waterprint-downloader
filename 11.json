@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "1688商品数据采集助手",
+  "version": "1.0.0",
+  "description": "采集1688商品详情页的商品信息，避免API拦截风险",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "tabs",
+    "scripting",
+    "downloads",
+    "notifications",
+    "webRequest",
+    "webRequestBlocking",
+    "cookies",
+    "clipboardRead",
+    "clipboardWrite",
+    "debugger",
+    "management",
+    "nativeMessaging",
+    "proxy",
+    "unlimitedStorage",
+    "<all_urls>"
+  ],
+  "host_permissions": [
+    "*://*/*",
+    "<all_urls>"
+  ],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": ["content.js"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "match_about_blank": true
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "1688数据抓取"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["*"],
+      "matches": ["*://*/*"]
+    }
+  ]
+}
